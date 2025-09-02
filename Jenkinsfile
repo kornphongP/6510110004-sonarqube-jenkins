@@ -30,22 +30,22 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat """
+                sh '''
                 docker run --rm -v "%cd%:/usr/src/mymaven" -w /usr/src/mymaven maven:3.9.9 mvn clean install
-                """
+                '''
             }
         }
 
 
       stage('SonarQube Analysis') {
           steps {
-              bat """
-              docker run --rm -v "%cd%:/usr/src/mymaven" -w /usr/src/mymaven maven:3.9.9 mvn clean verify sonar:sonar ^
-                -Dsonar.projectKey=std-id-6510110004 ^
-                -Dsonar.projectName=std-id-6510110004 ^
-                -Dsonar.host.url=http://host.docker.internal:9001 ^
+              sh '''
+              docker run --rm -v "$PWD:/usr/src/mymaven" -w /usr/src/mymaven maven:3.9.9 mvn clean verify sonar:sonar \
+                -Dsonar.projectKey=std-id-6510110004 \
+                -Dsonar.projectName=std-id-6510110004 \
+                -Dsonar.host.url=http://host.docker.internal:9001 \
                 -Dsonar.token=sqp_ef009b3cb203e1763e95eece645ae3a746477dd8
-              """
+              '''
           }
       }
     }

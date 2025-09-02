@@ -13,8 +13,7 @@ pipeline {
                     branches: [[name: '*/master']],
                     extensions: [],
                     userRemoteConfigs: [[
-                        credentialsId: 'github access',
-                        url: 'https://github.com/sreenivas449/java-hello-world-with-maven.git'
+                        url: 'https://github.com/kornphongP/6510110004-sonarqube-jenkins.git'
                     ]]
                 ])
             }
@@ -31,31 +30,23 @@ pipeline {
 
         stage('Build') {
             steps {
-                script {
-                    // Build project ภายใน Docker container
-                    sh '''
-                    docker run -i --rm --name my-maven-project \
-                      -v "${PWD}:/usr/src/mymaven" -w /usr/src/mymaven \
-                      maven:3.9.9 mvn clean install
-                    '''
-                }
+                bat """
+                docker run --rm -v "%cd%:/usr/src/mymaven" -w /usr/src/mymaven maven:3.9.9 mvn clean install
+                """
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    sh '''
-                    docker run -i --rm --name my-maven-project \
-                      -v "${PWD}:/usr/src/mymaven" -w /usr/src/mymaven \
-                      maven:3.9.9 mvn clean verify sonar:sonar \
-                        -Dsonar.projectKey=std-id-6510110004 \
-                        -Dsonar.projectName=std-id-6510110004 \
-                        -Dsonar.host.url=http://host.docker.internal:9001 \
-                        -Dsonar.token=sqp_ef009b3cb203e1763e95eece645ae3a746477dd8
-                    '''
-                }
-            }
-        }
+
+      stage('SonarQube Analysis') {
+          steps {
+              bat """
+              docker run --rm -v "%cd%:/usr/src/mymaven" -w /usr/src/mymaven maven:3.9.9 mvn clean verify sonar:sonar ^
+                -Dsonar.projectKey=std-id-6510110004 ^
+                -Dsonar.projectName=std-id-6510110004 ^
+                -Dsonar.host.url=http://host.docker.internal:9001 ^
+                -Dsonar.token=sqp_ef009b3cb203e1763e95eece645ae3a746477dd8
+              """
+          }
+      }
     }
 }

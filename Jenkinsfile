@@ -40,7 +40,7 @@ pipeline {
       stage('SonarQube Analysis') {
           steps {
               sh '''
-              docker run --rm -v "$PWD:/usr/src/mymaven" -w /usr/src/mymaven maven:3.9.9 mvn clean verify sonar:sonar \
+              docker run --rm -v "E:\work_unv\mobile_dev\sonarqube_jenkins\java-hello-world-with-maven:/usr/src/mymaven" -w /usr/src/mymaven maven:3.9.9 mvn clean verify sonar:sonar \
                 -Dsonar.projectKey=std-id-6510110004 \
                 -Dsonar.projectName=std-id-6510110004 \
                 -Dsonar.host.url=http://host.docker.internal:9001 \

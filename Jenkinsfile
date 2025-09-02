@@ -31,7 +31,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                docker run --rm -v "%cd%:/usr/src/mymaven" -w /usr/src/mymaven maven:3.9.9 mvn clean install
+                docker run --rm -v "E:\\work_unv\\mobile_dev\\sonarqube_jenkins\\java-hello-world-with-maven:/usr/src/mymaven" -w /usr/src/mymaven maven:3.9.9 mvn clean install
                 '''
             }
         }
